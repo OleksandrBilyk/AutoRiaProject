@@ -1,12 +1,23 @@
-from rest_framework.generics import ListCreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.generics import (ListAPIView, RetrieveUpdateDestroyAPIView,
+                                     UpdateAPIView)
+from rest_framework.permissions import (AllowAny, IsAdminUser, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 
 from apps.cars.models import CarModel
-from apps.cars.serializers import CarSerializer
+from apps.cars.serializers import (CarListSerializer, CarSerializer,
+                                   ProfilePhotoCarSerializer)
+
+from .filters import CarFilter
 
 
-class CarListCreateView(ListCreateAPIView):
-    serializer_class = CarSerializer
+class CarListView(ListAPIView):
     queryset = CarModel.objects.all()
-    permission_classes = [AllowAny]
-    pagination_class = None
+    serializer_class = CarListSerializer
+    filterset_class = CarFilter
+
+
+class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    queryset = CarModel.objects.all()
+    serializer_class = CarSerializer
+
+

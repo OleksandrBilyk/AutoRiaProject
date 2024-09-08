@@ -10,6 +10,7 @@ from rest_framework.generics import (GenericAPIView, ListCreateAPIView,
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
+from apps.cars.serializers import CarSerializer
 from apps.users.models import ProfileModel
 from apps.users.serializer import ProfileAvatarSerializer, UserSerializer
 
@@ -69,6 +70,19 @@ class UserAddAvatarView(UpdateAPIView):
         profile:ProfileModel = self.get_object()
         profile.avatar.delete()
         super().perform_update(serializer)
+
+
+class UsersAddCarView(GenericAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = (IsAuthenticated,)
+    def post(self, *args, **kwargs):
+        user = self.get_object()
+        data = self.request.data
+        serializer = CarSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+        user_serializer = UserSerializer(user)
+        return Response(serializer.data, status.HTTP_201_CREATED)
 
 
 class TestEmailView(GenericAPIView):

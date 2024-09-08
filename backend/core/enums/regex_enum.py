@@ -17,6 +17,14 @@ class RegexEnum(Enum):
             'password is 8-16 characters with no space'
         ]
     )
+    MODEL_CAR = (
+        r'^[A-Z][a-zA-Z\s]{2,49}$',
+        'first letter uppercase min 3 max 50'
+    )
+    BRAND = (
+        r'^[A-Z][a-zA-Z\s]{2,49}$',
+        'first letter uppercase min 3 max 50'
+    )
 
     def __init__(self, pattern: str, msg: str|list[str]):
         self.pattern = pattern
