@@ -1,6 +1,6 @@
 import os
 
-from core.permissions import IsAuthenticatedForGetOrWriteOnly
+from core.permissions import IsManager, IsSuperUser, IsUser
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -29,7 +29,7 @@ class UserListCreateView(ListCreateAPIView):
 class UserBlockView(GenericAPIView):
     # queryset = UserModel.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsSuperUser, IsManager)
 
     def get_queryset(self):
         return UserModel.objects.exclude(id=self.request.user.id)
@@ -45,7 +45,7 @@ class UserBlockView(GenericAPIView):
 class UserUnBlockView(GenericAPIView):
     serializer_class = UserSerializer
     # queryset = UserModel.objects.all()
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsSuperUser, IsManager)
 
     def get_queryset(self):
         return UserModel.objects.exclude(id=self.request.user.id)
@@ -59,7 +59,7 @@ class UserUnBlockView(GenericAPIView):
 
 
 class UserAddAvatarView(UpdateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsUser,)
     serializer_class = ProfileAvatarSerializer
     http_method_names = ('put',)
 
@@ -74,27 +74,15 @@ class UserAddAvatarView(UpdateAPIView):
 
 class UsersAddCarView(GenericAPIView):
     queryset = UserModel.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsUser,)
     def post(self, *args, **kwargs):
         user = self.get_object()
-        data = self.request.data
-        serializer = CarSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=user)
-        user_serializer = UserSerializer(user)
-        return Response(serializer.data, status.HTTP_201_CREATED)
+        print(user)
+        if True:
+            data = self.request.data
+            serializer = CarSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=user)
+            user_serializer = UserSerializer(user)
+            return Response(serializer.data, status.HTTP_201_CREATED)
 
-
-class TestEmailView(GenericAPIView):
-    # permission_classes = (AllowAny, )
-
-    def get_serializer(self, *args, **kwargs):
-        pass
-
-    def get(self, *args, **kwargs):
-        template = get_template('test_email.html')
-        html_content = template.render({'user': 'MAX'})
-        msg = EmailMultiAlternatives('Test', from_email=os.environ.get('EMAIL_HOST'), to=['biluksanya@ukr.net'])
-        msg.attach_alternative(html_content, 'text/html')
-        msg.send()
-        return Response(status=status.HTTP_200_OK)

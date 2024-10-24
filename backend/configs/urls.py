@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny
 
 schema_view = get_schema_view(
     openapi.Info(
-        title='AutoParks',
+        title='CloneAutoRia',
         default_version='v1',
         description='About Cars',
         contact=openapi.Contact(email='admin@gmail.com')

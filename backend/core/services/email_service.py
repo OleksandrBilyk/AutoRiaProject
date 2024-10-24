@@ -38,15 +38,3 @@ class EmailService:
             'recovery.html', {'url': url},
             'Recovery password'
         )
-
-    @staticmethod
-    @app.task
-    def spam():
-        for user in UserModel.objects.all():
-            user: UserDataClass = user
-            EmailService.__send_email(
-                user.email,
-                'spam.html',
-                {'name': user.profile.name},
-                'Spam'
-            )

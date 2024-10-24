@@ -10,7 +10,7 @@ from apps.users.managers import UserManager
 
 class UserModel(AbstractBaseUser, PermissionsMixin, BaseModel):
     class Meta:
-        db_table = 'auth_users'
+        db_table = 'users'
 
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128, validators=[V.RegexValidator(*RegexEnum.PASSWORD.value)])
