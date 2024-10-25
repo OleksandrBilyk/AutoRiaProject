@@ -21,9 +21,9 @@ class RegexEnum(Enum):
         r'^[A-Z][a-zA-Z\s]{2,49}$',
         'first letter uppercase min 3 max 50'
     )
-    BRAND = (
-        r'^[A-Z][a-zA-Z\s]{2,49}$',
-        'first letter uppercase min 3 max 50'
+    INFORMATION = (
+        r'^[A-Z][a-zA-Z\s]{2,349}$',
+        'first letter uppercase min 3 max 350'
     )
 
     def __init__(self, pattern: str, msg: str|list[str]):

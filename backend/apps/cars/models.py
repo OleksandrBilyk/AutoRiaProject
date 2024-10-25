@@ -6,7 +6,7 @@ from core.services.upload_photo_car import upload_photo_car
 from django.core import validators as V
 from django.db import models
 
-from apps.cars.choices import CarBrandChoices, CarChoices
+from apps.cars.choices import CarBrandChoices
 from apps.users.models import UserModel
 
 
@@ -16,9 +16,9 @@ class CarModel(BaseModel):
         ordering = ('id',)
 
     brand = models.CharField(max_length=50, choices=[*CarBrandChoices.choices])
-    model_car = models.CharField(max_length=50, validators=[V.RegexValidator(*RegexEnum.MODEL_CAR.value)])
     price = models.IntegerField(validators=[V.MinValueValidator(0), V.MaxValueValidator(1000000)])
     year = models.IntegerField(validators=[V.MinValueValidator(1990), V.MaxValueValidator(datetime.now().year)])
-    body_type = models.CharField(max_length=50, choices=[*CarChoices.choices])
+    car_model = models.CharField(max_length=50, validators=[V.RegexValidator(*RegexEnum.MODEL_CAR.value)])
     photo_car = models.ImageField(upload_to=upload_photo_car)
+    information = models.CharField(max_length=350, validators=[V.RegexValidator(*RegexEnum.INFORMATION.value)])
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')

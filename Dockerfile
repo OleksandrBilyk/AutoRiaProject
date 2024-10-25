@@ -12,25 +12,19 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DEBIAN_FRONTEND=noninteractive \
     COLUMNS=80
 
+
 RUN apk update
-RUN apk add --no-cache gcc musl-dev mariadb-dev
-RUN apk add --no-cache curl
-# for pillow
-RUN apk add --no-cache jpeg-dev zlib-dev libjpeg
+RUN apk add --no-cache gcc musl-dev mariadb-dev curl bash
 
 RUN mkdir /app
 WORKDIR /app
 
-#RUN pip install --upgrade pip
-#
-#COPY requirements.txt /tmp
-#
-#RUN cd /tmp && pip install -r requirements.txt
 ENV POETRY_HOME=/usr/local/poetry
-RUN curl -sSL https://install.python-poetry.org | python -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH=$POETRY_HOME/bin:$PATH
 
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml /app/
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-ansi
+RUN poetry config virtualenvs.create false
+RUN poetry lock
+RUN poetry install
