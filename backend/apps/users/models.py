@@ -16,6 +16,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin, BaseModel):
     password = models.CharField(max_length=128, validators=[V.RegexValidator(*RegexEnum.PASSWORD.value)])
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     is_premium = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'

@@ -1,12 +1,10 @@
 from django.db.models import TextChoices
 
 
-class CarChoices(TextChoices):
-    Hatchback = "Hatchback"
-    Sedan = "Sedan"
-    Coupe = 'Coupe'
-    Crossover = 'Crossover'
-    Universal = 'Universal'
+class CurrencyChoices(TextChoices):
+    UAH = "UAH"
+    USD = "USD"
+    EUR = "EUR"
 
 
 class CarBrandChoices(TextChoices):
@@ -16,3 +14,4 @@ class CarBrandChoices(TextChoices):
     Mazda = 'Mazda'
     Nissan = 'Nissan'
     Scoda = 'Scoda'
+
