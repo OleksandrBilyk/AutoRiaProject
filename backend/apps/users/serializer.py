@@ -4,6 +4,7 @@ from django.core.files import File
 from django.db.transaction import atomic
 from rest_framework import serializers
 
+from apps.cars.serializers import CarSerializer
 from apps.users.models import ProfileModel
 
 UserModel = get_user_model()
@@ -12,7 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProfileModel
-        fields = ('id','name', 'surname', 'age', 'avatar')
+        fields = ('id', 'name', 'surname', 'age', 'avatar', 'phone_number')
 
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
@@ -29,6 +30,7 @@ class ProfileAvatarSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    cars = CarSerializer(many=True, read_only=True)
     class Meta:
         model = UserModel
         fields = (

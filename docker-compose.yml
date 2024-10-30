@@ -43,4 +43,4 @@ services:
   celery:
     <<: *base-conf
     command: >
-      sh -c "celery -A configs worker -l info"
+      sh -c "celery -A configs worker -l info -B"

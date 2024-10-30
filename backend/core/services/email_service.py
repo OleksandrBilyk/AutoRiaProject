@@ -1,5 +1,8 @@
 import os
 
+import requests
+from apps.cars.models import CurrencyModel
+from apps.cars.serializers import CurrencySerializer
 from configs.celery import app
 from core.dataclasses.user_dataclass import UserDataClass
 from core.services.jwt_service import ActivateToken, JWTService, RecoveryToken
@@ -22,7 +25,7 @@ class EmailService:
     @classmethod
     def register(cls, user:UserDataClass):
         token = JWTService.create_token(user, ActivateToken)
-        url = f'http://localhost:3000/activate/{token}'
+        url = f'http://localhost:80/api/auth/activate/{token}'
         cls.__send_email.delay(
             user.email, 'register.html',
             {'name':user.profile.name, 'url':url},
@@ -32,9 +35,26 @@ class EmailService:
     @classmethod
     def recovery_password(cls, user:UserDataClass):
         token = JWTService.create_token(user, RecoveryToken)
-        url = f'http://localhost:3000/recovery/{token}'
+        url = f'http://localhost:80/api/auth/recovery/{token}'
         cls.__send_email.delay(
             user.email,
             'recovery.html', {'url': url},
             'Recovery password'
         )
+    @staticmethod
+    @app.task
+    def get_currency():
+        url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
+
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            currency = response.json()
+            CurrencyModel.objects.all().delete()
+            for data in currency:
+                print(currency)
+                serializer = CurrencySerializer(data=data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+        else:
+            print(f'Request failed with status {response.status_code}')

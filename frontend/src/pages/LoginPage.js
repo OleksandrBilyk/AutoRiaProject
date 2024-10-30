@@ -9,12 +9,17 @@ const LoginPage = () => {
         await authService.login(user)
         navigate('/cars')
     }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <input type="text" placeholder={'email'} {...register('email')}/>
-            <input type="text" placeholder={'password'} {...register('password')}/>
-            <button>login</button>
-        </form>
+        <div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" placeholder={'email'} {...register('email')}/>
+                <input type="text" placeholder={'password'} {...register('password')}/>
+                <button>login</button>
+            </form>
+            <h4>for registration new user click registration button</h4>
+            <button onClick={() => navigate('/registration')}>registration</button>
+        </div>
     );
 };
 

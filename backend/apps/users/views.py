@@ -84,5 +84,5 @@ class UsersAddCarView(GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save(user=user)
             user_serializer = UserSerializer(user)
-            return Response(serializer.data, status.HTTP_201_CREATED)
+            return Response(user_serializer.data, status.HTTP_201_CREATED)
 

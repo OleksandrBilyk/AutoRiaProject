@@ -18,11 +18,11 @@ class RegexEnum(Enum):
         ]
     )
     MODEL_CAR = (
-        r'^[A-Z][a-zA-Z\s]{2,49}$',
-        'first letter uppercase min 3 max 50'
+        r'^[a-zA-Z0-9\s]{2,49}$',
+        'min 2 max 50 symbols'
     )
     INFORMATION = (
-        r'^[A-Z][a-zA-Z\s]{2,349}$',
+        r'^[A-Z][a-zA-Z\s\d]{2,349}$',
         'first letter uppercase min 3 max 350'
     )
 

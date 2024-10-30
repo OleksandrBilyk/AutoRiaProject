@@ -10,7 +10,7 @@ schema_view = get_schema_view(
         title='CloneAutoRia',
         default_version='v1',
         description='About Cars',
-        contact=openapi.Contact(email='admin@gmail.com')
+        contact=openapi.Contact(email='biluksanya@ukr.net')
     ),
     public=True,
     permission_classes=[AllowAny,],

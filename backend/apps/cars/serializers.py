@@ -1,13 +1,14 @@
 
 from rest_framework import serializers
 
-from apps.cars.models import CarModel
+from apps.cars.models import CarModel, CurrencyModel
 
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarModel
-        fields = ('id', 'brand', 'car_model', 'price', 'year', 'created_at', 'updated_at', 'photo_car', 'information', 'currency')
+        fields = ('id', 'brand', 'car_model', 'price', 'year', 'created_at', 'updated_at', 'photo_car',
+                  'information', 'currency')
 
 
 class ProfilePhotoCarSerializer(serializers.ModelSerializer):
@@ -22,5 +23,9 @@ class CarListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarModel
         fields = ('id', 'brand', 'year', 'user')
-        depth = 1
 
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CurrencyModel
+        fields = ('id', 'created_at', 'updated_at', 'ccy', 'buy', 'sale')
