@@ -8,7 +8,7 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarModel
         fields = ('id', 'brand', 'car_model', 'price', 'year', 'created_at', 'updated_at', 'photo_car',
-                  'information', 'currency')
+                  'information', 'currency', 'user')
 
 
 class ProfilePhotoCarSerializer(serializers.ModelSerializer):
@@ -22,10 +22,11 @@ class CarListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarModel
-        fields = ('id', 'brand', 'year', 'user')
+        fields = ('id', 'brand', 'year', 'currency')
 
 
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = CurrencyModel
         fields = ('id', 'created_at', 'updated_at', 'ccy', 'buy', 'sale')
+

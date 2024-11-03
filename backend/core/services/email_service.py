@@ -52,7 +52,6 @@ class EmailService:
             currency = response.json()
             CurrencyModel.objects.all().delete()
             for data in currency:
-                print(currency)
                 serializer = CurrencySerializer(data=data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()

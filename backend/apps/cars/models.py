@@ -28,6 +28,6 @@ class CurrencyModel(BaseModel):
     class Meta:
         db_table = 'currency'
 
-    ccy = models.CharField(max_length=400)
-    buy = models.CharField(max_length=350)
-    sale = models.CharField(max_length=45)
+    ccy = models.CharField(max_length=4)
+    buy = models.CharField(max_length=10)
+    sale = models.CharField(max_length=10)

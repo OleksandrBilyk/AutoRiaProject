@@ -77,7 +77,6 @@ class UsersAddCarView(GenericAPIView):
     permission_classes = (IsUser,)
     def post(self, *args, **kwargs):
         user = self.get_object()
-        print(user)
         if True:
             data = self.request.data
             serializer = CarSerializer(data=data)
