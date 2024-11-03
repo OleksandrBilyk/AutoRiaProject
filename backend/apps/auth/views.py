@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.users.serializer import UserSerializer
 
-from .serializers import EmailSerializer, PasswordSerializer
+from .serializers import EmailSerializer, PasswordSerializer, PaymentSerializer
 
 UserModel = get_user_model()
 class UserActivateView(GenericAPIView):
@@ -57,6 +57,21 @@ class RecoveryPasswordView(GenericAPIView):
         return Response({'detail': 'password changed'}, status.HTTP_200_OK)
 
 
+class PaymentForPremiumView(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = PaymentSerializer
+
+    def post(self, *args, **kwargs):
+        data = self.request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        user = get_object_or_404(UserModel, email=serializer.data.get('email'))
+        user.is_premium = True
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+
 @method_decorator(name='post',
                   decorator=swagger_auto_schema(responses={status.HTTP_200_OK: TokenRefreshSerializer()}, security=[]))
 class TokenPairView(TokenObtainPairView):
@@ -69,3 +84,4 @@ class SocketView(GenericAPIView):
     def get(self, *args, **kwargs):
         token = JWTService.create_token(self.request.user, SocketToken)
         return Response({'token': str(token)}, status.HTTP_200_OK)
+

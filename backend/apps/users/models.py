@@ -36,6 +36,8 @@ class ProfileModel(BaseModel):
     ])
     age = models.IntegerField(validators=[V.MinValueValidator(15), V.MaxValueValidator(130)])
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField(max_length=13, validators=[
+        V.RegexValidator(*RegexEnum.PHONE.value)])
     avatar = models.ImageField(upload_to=upload_avatar, blank=True, validators=(V.FileExtensionValidator(['gif', 'jpeg', 'png']),))
 
     

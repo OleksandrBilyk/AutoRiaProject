@@ -1,6 +1,7 @@
 import os
 
 from core.permissions import IsManager, IsSuperUser, IsUser
+from core.services.email_service import EmailService
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -10,6 +11,7 @@ from rest_framework.generics import (GenericAPIView, ListCreateAPIView,
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
+from apps.cars.models import CarModel
 from apps.cars.serializers import CarSerializer
 from apps.users.models import ProfileModel
 from apps.users.serializer import ProfileAvatarSerializer, UserSerializer
@@ -27,7 +29,6 @@ class UserListCreateView(ListCreateAPIView):
 
 
 class UserBlockView(GenericAPIView):
-    # queryset = UserModel.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsSuperUser, IsManager)
 
@@ -44,7 +45,6 @@ class UserBlockView(GenericAPIView):
 
 class UserUnBlockView(GenericAPIView):
     serializer_class = UserSerializer
-    # queryset = UserModel.objects.all()
     permission_classes = (IsSuperUser, IsManager)
 
     def get_queryset(self):
@@ -74,14 +74,20 @@ class UserAddAvatarView(UpdateAPIView):
 
 class UsersAddCarView(GenericAPIView):
     queryset = UserModel.objects.all()
-    permission_classes = (IsUser,)
+    permission_classes = (IsAuthenticated,)
     def post(self, *args, **kwargs):
         user = self.get_object()
-        if True:
-            data = self.request.data
-            serializer = CarSerializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user=user)
-            user_serializer = UserSerializer(user)
-            return Response(user_serializer.data, status.HTTP_201_CREATED)
+        user_serializer = UserSerializer(user)
+        if not user_serializer.data.get('is_premium'):
+            CarModel.objects.filter(user_id=user_serializer.data.get('id')).delete()
+            EmailService.payment(user)
+        data = self.request.data
+        data = data.copy()
+        data['user'] = user_serializer.data.get('id')
+        serializer = CarSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+        return Response(serializer.data, status.HTTP_201_CREATED)
+
+
 

@@ -28,7 +28,7 @@ class EmailService:
         url = f'http://localhost:80/api/auth/activate/{token}'
         cls.__send_email.delay(
             user.email, 'register.html',
-            {'name':user.profile.name, 'url':url},
+            {'name':user.profile.name, 'url':url },
             'Register'
         )
 
@@ -41,6 +41,16 @@ class EmailService:
             'recovery.html', {'url': url},
             'Recovery password'
         )
+
+    @classmethod
+    def payment(cls, user: UserDataClass):
+        url = f'http://localhost:80/api/auth/payment/'
+        cls.__send_email.delay(
+            user.email,
+            'payment.html', {'url': url},
+            'Payment for premium'
+        )
+
     @staticmethod
     @app.task
     def get_currency():

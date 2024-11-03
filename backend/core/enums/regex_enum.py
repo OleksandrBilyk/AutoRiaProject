@@ -25,6 +25,10 @@ class RegexEnum(Enum):
         r'^[A-Z][a-zA-Z\s\d]{2,349}$',
         'first letter uppercase min 3 max 350'
     )
+    PHONE = (
+        r'^(\+38)(\s|-)?(\()?[0-9]{3}(\))?(\s|-)?([0-9]{3})(\s|-)?([0-9]{2})(\s|-)?([0-9]{2})$',
+        'Phone must start +380'
+    )
 
     def __init__(self, pattern: str, msg: str|list[str]):
         self.pattern = pattern
