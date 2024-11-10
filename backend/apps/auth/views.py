@@ -20,7 +20,6 @@ class UserActivateView(GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
-
     def post(self, *args, **kwargs):
         token = kwargs['token']
         user = JWTService.validate_token(token, ActivateToken)

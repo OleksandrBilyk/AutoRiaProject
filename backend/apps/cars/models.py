@@ -6,7 +6,7 @@ from core.services.upload_photo_car import upload_photo_car
 from django.core import validators as V
 from django.db import models
 
-from apps.cars.choices import CarBrandChoices, CurrencyChoices
+from apps.cars.choices import CarBrandChoices, CurrencyChoices, RegionChoices
 from apps.users.models import UserModel
 
 
@@ -22,6 +22,7 @@ class CarModel(BaseModel):
     photo_car = models.ImageField(upload_to=upload_photo_car, blank=True, validators=(V.FileExtensionValidator(['gif', 'jpeg', 'png']),))
     information = models.CharField(max_length=350, validators=[V.RegexValidator(*RegexEnum.INFORMATION.value)])
     currency = models.CharField(max_length=4, choices=[*CurrencyChoices.choices])
+    region = models.CharField(max_length=25, choices=[*RegionChoices.choices])
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
 class CurrencyModel(BaseModel):

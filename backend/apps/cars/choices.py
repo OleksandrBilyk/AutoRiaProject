@@ -30,4 +30,32 @@ class CarBrandChoices(TextChoices):
     Other = 'Other'
 
 
+class RegionChoices(TextChoices):
+    Kyiv = "Kyiv"
+    Sevastopol = "Sevastopol"
+    Avtonomna_Respublika_Krym= "Avtonomna Respublika Krym"
+    Vinnytska = "Vinnytska"
+    Volynska = "Volynska "
+    Dnipropetrovska = "Dnipropetrovska"
+    Donetska = "Donetska"
+    Zhytomyrskа = "Zhytomyrskа"
+    Zakarpatska = "Zakarpatska"
+    Zaporizka = "Zaporizka"
+    Ivano_Frankivska = "Ivano-Frankivska"
+    Kyivska = "Kyivska"
+    Kirovohradska = "Kirovohradska"
+    Luhanska = "Luhanska"
+    Lvivska = "Lvivska"
+    Mykolaivska = "Mykolaivska"
+    Odeska = "Odeska"
+    Poltavska = "Poltavska"
+    Rivnenska = "Rivnenska"
+    Sumska = "Sumska"
+    Ternopilska = "Ternopilska"
+    Kharkivska = "Kharkivska"
+    Khersonska = "Khersonska"
+    Khmelnytska = "Khmelnytska"
+    Cherkaska = "Cherkaska"
+    Chernivetska = "Chernivetska"
+    Chernihivska= "Chernihivska"
 

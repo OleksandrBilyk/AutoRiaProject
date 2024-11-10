@@ -10,8 +10,11 @@ class CarDataClass:
     brand: str
     price: int
     year: int
-    body_type: str
+    car_model: str
     photo_car: str
+    information: str
+    currency: str
+    region: str
     user: UserDataClass
     created_at: datetime
     updated_at: datetime
