@@ -43,6 +43,16 @@ class EmailService:
         )
 
     @classmethod
+    def user_banned(cls, user: UserDataClass):
+        for admin in UserModel.objects.filter(is_staff=True):
+            cls.__send_email.delay(
+                admin.email,
+                'user_banned.html', {'admin_name':admin.profile.name,'name':user.email},
+                'User banned due to profanity'
+            )
+
+
+    @classmethod
     def payment(cls, user: UserDataClass):
         url = f'http://localhost:80/api/auth/payment/'
         cls.__send_email.delay(

@@ -80,13 +80,8 @@ class UsersAddCarView(GenericAPIView):
         user_serializer = UserSerializer(user)
         data = self.request.data
         no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
-        if no_profanity_data == 0:
-            return Response({'details': 'User is not active, please send message to admin for unban'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        elif no_profanity_data == 2 or no_profanity_data == 1:
-            print(no_profanity_data)
-            return Response({'details': f'In your ad, the system found obscene language, '
-                                f'you have {no_profanity_data} attempts to change the ad'}, status.HTTP_400_BAD_REQUEST)
+        if isinstance(no_profanity_data, str):
+            return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer = CarSerializer(data=no_profanity_data)
             serializer.is_valid(raise_exception=True)
