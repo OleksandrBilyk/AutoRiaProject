@@ -38,7 +38,7 @@ class UserBlockView(GenericAPIView):
 
         user = self.get_object()
         if user.is_active:
-            user.is_active = False
+            user.is_active = 0
             user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
@@ -52,7 +52,7 @@ class UserUnBlockView(GenericAPIView):
     def patch(self, *args, **kwargs):
         user = self.get_object()
         if not user.is_active:
-            user.is_active = True
+            user.is_active = 3
             user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
@@ -78,18 +78,17 @@ class UsersAddCarView(GenericAPIView):
     def post(self, *args, **kwargs):
         user = self.get_object()
         user_serializer = UserSerializer(user)
-        if not user_serializer.data.get('is_active'):
+        data = self.request.data
+        no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
+        if no_profanity_data == 0:
             return Response({'details': 'User is not active, please send message to admin for unban'},
                             status=status.HTTP_400_BAD_REQUEST)
-        else:
-            data = self.request.data
-            no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
-            if not no_profanity_data:
-                return Response({'details': 'матюки'}, status.HTTP_400_BAD_REQUEST)
+        elif no_profanity_data == 2 or no_profanity_data == 1:
             print(no_profanity_data)
-            data = data.copy()
-            data['user'] = user_serializer.data.get('id')
-            serializer = CarSerializer(data=data)
+            return Response({'details': f'In your ad, the system found obscene language, '
+                                f'you have {no_profanity_data} attempts to change the ad'}, status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = CarSerializer(data=no_profanity_data)
             serializer.is_valid(raise_exception=True)
             if not user_serializer.data.get('is_premium'):
                 CarModel.objects.filter(user_id=user_serializer.data.get('id')).delete()

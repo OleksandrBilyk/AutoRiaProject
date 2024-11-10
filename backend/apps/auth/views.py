@@ -23,7 +23,7 @@ class UserActivateView(GenericAPIView):
     def post(self, *args, **kwargs):
         token = kwargs['token']
         user = JWTService.validate_token(token, ActivateToken)
-        user.is_active = True
+        user.is_active = 3
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
