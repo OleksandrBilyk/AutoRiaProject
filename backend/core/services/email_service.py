@@ -63,7 +63,7 @@ class EmailService:
 
     @staticmethod
     @app.task
-    def get_currency():
+    def get_currency_course():
         url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
 
         response = requests.get(url)
