@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from apps.cars.models import CarModel, CurrencyModel
 from apps.cars.serializers import (CarListSerializer, CarPhotoSerializer,
                                    CarSerializer)
+from apps.information.serializer import CarViewSerializer
 
 from .filters import CarFilter
 
@@ -30,7 +31,7 @@ class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         serializer = CarSerializer(car)
         data = serializer.data
         CurrencyService.add_currency_to_car(data)
-
+        car.car_view.create()
         return Response(data, status.HTTP_201_CREATED)
 
 class CarAddPhotosView(GenericAPIView):
