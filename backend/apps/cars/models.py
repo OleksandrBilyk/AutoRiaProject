@@ -24,13 +24,15 @@ class CarModel(BaseModel):
     region = models.CharField(max_length=25, choices=[*RegionChoices.choices])
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
-class CurrencyModel(BaseModel):
+
+class CurrencyModel(models.Model):
     class Meta:
         db_table = 'currency'
 
     ccy = models.CharField(max_length=4)
     buy = models.CharField(max_length=10)
     sale = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class CarPhotoModel(BaseModel):
     class Meta:

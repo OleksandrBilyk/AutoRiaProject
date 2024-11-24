@@ -36,7 +36,6 @@ class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 class CarAddPhotosView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
-    # serializer_class = CarPhotoSerializer
     queryset = CarModel.objects.all()
 
     def put(self, *args, **kwargs):
