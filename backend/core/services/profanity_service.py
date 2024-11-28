@@ -16,7 +16,7 @@ class NoProfanityService:
             user.save()
             if user.is_active == 0:
                 EmailService.user_banned(user)
-                return 'User is not active, please send message to admin for unban'
+                return 'User is banned, system send message to admin for unban'
             else: 
                 return (f'In your ad, the system found obscene language, '
                         f'you have {user.is_active} attempts to change the ad')

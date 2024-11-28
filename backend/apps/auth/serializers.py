@@ -17,5 +17,8 @@ class PasswordSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.Serializer):
-    payment = serializers.IntegerField(validators=[V.MinValueValidator(300), V.MaxValueValidator(300)])
+    payment = serializers.IntegerField(validators=[V.MinValueValidator(300,
+                                                                       message="Payment should be exactly 300."),
+                                                   V.MaxValueValidator(300,
+                                                                       message="Payment should be exactly 300.")])
     email = serializers.EmailField()

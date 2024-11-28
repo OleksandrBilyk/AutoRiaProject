@@ -1,4 +1,6 @@
 from core.services.currency_service import CurrencyService
+from core.services.email_service import EmailService
+from core.services.profanity_service import NoProfanityService
 from rest_framework import status
 from rest_framework.generics import (GenericAPIView, ListAPIView,
                                      RetrieveUpdateDestroyAPIView)
@@ -10,6 +12,8 @@ from apps.cars.models import CarModel, CurrencyModel
 from apps.cars.serializers import (CarListSerializer, CarPhotoSerializer,
                                    CarSerializer)
 from apps.information.serializer import CarViewSerializer
+from apps.users.models import UserModel
+from apps.users.serializer import UserSerializer
 
 from .filters import CarFilter
 
@@ -19,6 +23,29 @@ class CarListView(ListAPIView):
     serializer_class = CarListSerializer
     filterset_class = CarFilter
     permission_classes = [AllowAny]
+
+
+class CreateCarView(GenericAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        user_serializer = UserSerializer(user)
+        data = self.request.data
+        data = data.copy()
+        data['user'] = user_serializer.data.get('id')
+        serializer = CarSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
+        if isinstance(no_profanity_data, bool):
+            if not user_serializer.data.get('is_premium'):
+                CarModel.objects.filter(user_id=user_serializer.data.get('id')).delete()
+                EmailService.payment(user)
+            serializer.save(user=user)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        else:
+            return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
@@ -33,6 +60,7 @@ class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         CurrencyService.add_currency_to_car(data)
         car.car_view.create()
         return Response(data, status.HTTP_201_CREATED)
+
 
 class CarAddPhotosView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
