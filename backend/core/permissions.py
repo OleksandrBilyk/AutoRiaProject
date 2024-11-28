@@ -10,15 +10,15 @@ class IsAuthenticatedForGetOrWriteOnly(BasePermission):
 
 
 class IsSuperUser(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view):
         return bool(request.user and request.user.is_staff and request.user.is_superuser)
 
 
 class IsManager(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view):
         return bool(request.user and request.user.is_staff)
 
 
 class IsUser(BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view):
         return bool(request.user)

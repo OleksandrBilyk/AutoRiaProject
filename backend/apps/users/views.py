@@ -30,7 +30,7 @@ class UserListCreateView(ListCreateAPIView):
 
 class UserBlockView(GenericAPIView):
     serializer_class = UserSerializer
-    permission_classes = (IsSuperUser, IsManager)
+    permission_classes = (IsManager, IsSuperUser)
 
     def get_queryset(self):
         return UserModel.objects.exclude(id=self.request.user.id)
@@ -79,17 +79,20 @@ class UsersAddCarView(GenericAPIView):
         user = self.get_object()
         user_serializer = UserSerializer(user)
         data = self.request.data
+        data = data.copy()
+        data['user'] = user_serializer.data.get('id')
+        serializer = CarSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
         no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
-        if isinstance(no_profanity_data, str):
-            return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer = CarSerializer(data=no_profanity_data)
-            serializer.is_valid(raise_exception=True)
+        if isinstance(no_profanity_data, bool):
             if not user_serializer.data.get('is_premium'):
                 CarModel.objects.filter(user_id=user_serializer.data.get('id')).delete()
                 EmailService.payment(user)
             serializer.save(user=user)
             return Response(serializer.data, status.HTTP_201_CREATED)
+        else:
+            return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

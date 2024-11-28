@@ -13,6 +13,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'get_currency': {
         'task': 'core.services.email_service.get_currency_course',
-        'schedule': crontab(minute='0', hour='6')
+        'schedule': crontab(minute='1', hour='0')
     }
 }

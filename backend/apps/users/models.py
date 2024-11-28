@@ -14,7 +14,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128, validators=[V.RegexValidator(*RegexEnum.PASSWORD.value)])
-    is_active = models.IntegerField(default=3)
+    is_active = models.IntegerField(default=0)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_premium = models.BooleanField(default=False)
@@ -22,6 +22,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin, BaseModel):
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
+
 
 
 class ProfileModel(BaseModel):

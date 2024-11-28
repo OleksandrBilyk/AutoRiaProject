@@ -11,7 +11,6 @@ list_of_profanity = ['dick', 'жопа']  # This is a list of profanity words. I
 class NoProfanityService:
     @staticmethod
     def no_profanity_check(user, data):
-        user_serializer = UserSerializer(user)
         if any(sub in dict(data).get('information')[0] for sub in list_of_profanity):
             user.is_active -= 1
             user.save()
@@ -24,6 +23,4 @@ class NoProfanityService:
         else:
             user.is_active = 3
             user.save()
-            data = data.copy()
-            data['user'] = user_serializer.data.get('id')
-            return data
+            return True

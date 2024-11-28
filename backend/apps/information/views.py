@@ -45,8 +45,7 @@ class UserCarInformationView(GenericAPIView):
         data = self.request.data
         if not data.get('id'):
             return Response(user_serializer.data, status.HTTP_200_OK)
-        # car = get_object_or_404(CarModel, id=data.get('id'))
-        # car_serializer = CarSerializer(car)
+
 
         context = CarStatisticService.car_viewing_count(data)
 
