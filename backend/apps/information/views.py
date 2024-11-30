@@ -16,6 +16,8 @@ from apps.users.serializer import UserSerializer
 from .models import CarViewingModel
 
 UserModel = get_user_model()
+
+
 class TradingPlatformInformationView(GenericAPIView):
     permission_classes = (AllowAny,)
 
@@ -29,17 +31,17 @@ class TradingPlatformInformationView(GenericAPIView):
         time_update = currency_serializer_usd.data.get('updated_at')
         timestamp = (datetime.fromisoformat(time_update).isoformat(" ", "seconds")
                      .replace("+00:00", ""))
-        context = {'registered_users': registered_users,
-                   'premium_users': premium_users,
-                   'registered_auto': registered_auto,
-                   'viewing_count': viewing_count,
-                   'exchange_rate_update_time': timestamp,
-                   'USD_exchange_rate_buy': currency_serializer_usd.data.get('buy'),
-                   'USD_exchange_rate_sale': currency_serializer_usd.data.get('sale'),
-                   'EUR_exchange_rate_buy': currency_serializer_eur.data.get('buy'),
-                   'EUR_exchange_rate_sale': currency_serializer_eur.data.get('sale')
-                   }
-        return Response(context, status.HTTP_200_OK)
+        data = {'registered_users': registered_users,
+                'premium_users': premium_users,
+                'registered_auto': registered_auto,
+                'viewing_count': viewing_count,
+                'exchange_rate_update_time': timestamp,
+                'USD_exchange_rate_buy': currency_serializer_usd.data.get('buy'),
+                'USD_exchange_rate_sale': currency_serializer_usd.data.get('sale'),
+                'EUR_exchange_rate_buy': currency_serializer_eur.data.get('buy'),
+                'EUR_exchange_rate_sale': currency_serializer_eur.data.get('sale')
+                }
+        return Response(data, status.HTTP_200_OK)
 
 
 class UserCarInformationView(GenericAPIView):

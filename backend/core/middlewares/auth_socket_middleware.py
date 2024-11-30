@@ -1,15 +1,16 @@
 from channels.db import database_sync_to_async
 from channels.middleware import BaseMiddleware
-from core.exceptions.jwt_exception import JWTException
 from core.services.jwt_service import JWTService, SocketToken
 
 
 @database_sync_to_async
-def get_user(token):
+def get_user(token: str | None):
     try:
         return JWTService.validate_token(token, SocketToken)
     except (Exception,):
         return None
+
+
 class AuthSocketMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         token = (

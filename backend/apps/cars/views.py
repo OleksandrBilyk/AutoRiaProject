@@ -29,6 +29,8 @@ class CreateCarView(GenericAPIView):
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated,)
 
+
+
     def post(self, *args, **kwargs):
         user = self.request.user
         user_serializer = UserSerializer(user)

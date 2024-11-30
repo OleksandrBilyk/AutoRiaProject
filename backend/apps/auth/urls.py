@@ -7,10 +7,10 @@ from apps.auth.views import (PaymentForPremiumView, RecoveryPasswordView,
 
 urlpatterns = [
     path('', TokenPairView.as_view(), name='auth_login'),
-    path('/refresh', TokenRefreshView.as_view(), name='auth_login'),
-    path('/activate/<str:token>', UserActivateView.as_view()),
-    path('/recovery', RecoveryRequestView.as_view()),
-    path('/recovery/<str:token>', RecoveryPasswordView.as_view()),
-    path('/socket', SocketView.as_view()),
-    path('/payment', PaymentForPremiumView.as_view())
+    path('/refresh', TokenRefreshView.as_view(), name='auth_refresh_token'),
+    path('/activate/<str:token>', UserActivateView.as_view(), name='auth_activate'),
+    path('/recovery', RecoveryRequestView.as_view(), name='auth_recovery_password_request'),
+    path('/recovery/<str:token>', RecoveryPasswordView.as_view(), name='auth_recovery_password'),
+    path('/socket', SocketView.as_view(), name='auth_socket_token'),
+    path('/payment', PaymentForPremiumView.as_view(), name='auth_pay_premium')
 ]

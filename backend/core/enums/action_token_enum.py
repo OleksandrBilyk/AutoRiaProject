@@ -13,7 +13,7 @@ class ActionTokenEnum(Enum):
     )
     SOCKET = (
         'socket',
-        timedelta(seconds=30)
+        timedelta(seconds=60)
     )
 
     def __init__(self, token_type, life_time):
