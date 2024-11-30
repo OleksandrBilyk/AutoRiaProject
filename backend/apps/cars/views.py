@@ -29,8 +29,6 @@ class CreateCarView(GenericAPIView):
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated,)
 
-
-
     def post(self, *args, **kwargs):
         user = self.request.user
         user_serializer = UserSerializer(user)
@@ -44,6 +42,10 @@ class CreateCarView(GenericAPIView):
             if not user_serializer.data.get('is_premium'):
                 CarModel.objects.filter(user_id=user_serializer.data.get('id')).delete()
                 EmailService.payment(user)
+            if serializer.validated_data.get('brand') == 'Other':
+                serializer.save(user=user)
+                return Response('The car ad has been added with the manufacturer brand "Other". '
+                                'To add your car brand, please contact the support chat', status.HTTP_201_CREATED)
             serializer.save(user=user)
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
