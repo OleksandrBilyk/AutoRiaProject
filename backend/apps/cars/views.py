@@ -61,6 +61,22 @@ class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         car.car_view.create()
         return Response(data, status.HTTP_201_CREATED)
 
+    def put(self, request, *args, **kwargs):
+        car = self.get_object()
+        user = self.request.user
+        user_serializer = UserSerializer(user)
+        data = self.request.data
+        data = data.copy()
+        data['user'] = user_serializer.data.get('id')
+        serializer = CarSerializer(car, data=data)
+        serializer.is_valid(raise_exception=True)
+        no_profanity_data = NoProfanityService.no_profanity_check(user=user, data=data)
+        if isinstance(no_profanity_data, bool):
+            serializer.save(user=user)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        else:
+            return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CarAddPhotosView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
