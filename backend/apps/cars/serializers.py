@@ -17,6 +17,7 @@ class CarPhotoSerializer(serializers.ModelSerializer):
 
 class CarSerializer(serializers.ModelSerializer):
     photo_car = CarPhotoSerializer(many=True, read_only=True)
+
     class Meta:
         model = CarModel
         fields = ('id', 'brand', 'car_model', 'price', 'year', 'created_at', 'updated_at', 'photo_car',
@@ -34,4 +35,3 @@ class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = CurrencyModel
         fields = ('id', 'created_at', 'updated_at', 'ccy', 'buy', 'sale')
-

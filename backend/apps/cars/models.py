@@ -38,5 +38,6 @@ class CarPhotoModel(BaseModel):
     class Meta:
         db_table = 'car_photos'
 
-    photo = models.ImageField(upload_to=upload_photo_car, blank=True, validators=(V.FileExtensionValidator(['gif', 'jpeg', 'png']),))
+    photo = models.ImageField(upload_to=upload_photo_car, blank=True,
+                              validators=(V.FileExtensionValidator(['gif', 'jpeg', 'png']),))
     car = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name='photo_car')

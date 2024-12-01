@@ -1,24 +1,29 @@
 from core.services.currency_service import CurrencyService
 from core.services.email_service import EmailService
 from core.services.profanity_service import NoProfanityService
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import (GenericAPIView, ListAPIView,
                                      RetrieveUpdateDestroyAPIView)
-from rest_framework.permissions import (AllowAny, IsAdminUser, IsAuthenticated,
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from apps.cars.models import CarModel, CurrencyModel
+from apps.cars.models import CarModel
 from apps.cars.serializers import (CarListSerializer, CarPhotoSerializer,
                                    CarSerializer)
-from apps.information.serializer import CarViewSerializer
 from apps.users.models import UserModel
 from apps.users.serializer import UserSerializer
 
 from .filters import CarFilter
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class CarListView(ListAPIView):
+    """
+    List all cars in base
+    """
     queryset = CarModel.objects.all()
     serializer_class = CarListSerializer
     filterset_class = CarFilter
@@ -28,6 +33,7 @@ class CarListView(ListAPIView):
 class CreateCarView(GenericAPIView):
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated,)
+    serializer_class = CarSerializer
 
     def post(self, *args, **kwargs):
         user = self.request.user

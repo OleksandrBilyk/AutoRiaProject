@@ -2,24 +2,31 @@ from core.services.email_service import EmailService
 from core.services.jwt_service import (ActivateToken, JWTService,
                                        RecoveryToken, SocketToken)
 from django.contrib.auth import get_user_model
-from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.users.serializer import UserSerializer
 
-from .serializers import EmailSerializer, PasswordSerializer, PaymentSerializer
+from .serializers import (EmailSerializer, PasswordSerializer,
+                          PaymentSerializer, SuccessSerializer,
+                          TokenSerializer)
 
 UserModel = get_user_model()
-class UserActivateView(GenericAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserSerializer
 
+
+class UserActivateView(GenericAPIView):
+    """
+    Activate user account
+    """
+    permission_classes = [AllowAny]
+
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: UserSerializer}, security=[])
     def post(self, *args, **kwargs):
         token = kwargs['token']
         user = JWTService.validate_token(token, ActivateToken)
@@ -28,10 +35,15 @@ class UserActivateView(GenericAPIView):
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
 
+
 class RecoveryRequestView(GenericAPIView):
+    """
+        Send email to recovery password
+    """
     permission_classes = (AllowAny,)
     serializer_class = EmailSerializer
 
+    @swagger_auto_schema(responses={status.HTTP_200_OK: SuccessSerializer}, security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)
@@ -42,9 +54,14 @@ class RecoveryRequestView(GenericAPIView):
 
 
 class RecoveryPasswordView(GenericAPIView):
+    """
+            Send new password and token received for recovery
+    """
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
 
+    @swagger_auto_schema(request={PasswordSerializer}, responses={status.HTTP_200_OK: SuccessSerializer},
+                         security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)
@@ -57,9 +74,13 @@ class RecoveryPasswordView(GenericAPIView):
 
 
 class PaymentForPremiumView(GenericAPIView):
+    """
+    Payment page for premium status for the user. You need to enter exactly 300, and user's email
+    """
     permission_classes = (AllowAny,)
     serializer_class = PaymentSerializer
 
+    @swagger_auto_schema(responses={status.HTTP_200_OK: UserSerializer}, security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)
@@ -71,16 +92,15 @@ class PaymentForPremiumView(GenericAPIView):
         return Response(serializer.data, status.HTTP_200_OK)
 
 
-@method_decorator(name='post',
-                  decorator=swagger_auto_schema(responses={status.HTTP_200_OK: TokenRefreshSerializer()}, security=[]))
-class TokenPairView(TokenObtainPairView):
-    pass
-
-
 class SocketView(GenericAPIView):
+    """
+                Get socket token
+    """
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(responses={status.HTTP_200_OK: TokenSerializer})
     def get(self, *args, **kwargs):
         token = JWTService.create_token(self.request.user, SocketToken)
         return Response({'token': str(token)}, status.HTTP_200_OK)
+
 

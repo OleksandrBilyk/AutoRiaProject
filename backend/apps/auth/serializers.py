@@ -22,3 +22,11 @@ class PaymentSerializer(serializers.Serializer):
                                                    V.MaxValueValidator(300,
                                                                        message="Payment should be exactly 300.")])
     email = serializers.EmailField()
+
+
+class SuccessSerializer(serializers.Serializer):
+    details = serializers.CharField()
+
+
+class TokenSerializer(serializers.Serializer):
+    token = serializers.CharField()

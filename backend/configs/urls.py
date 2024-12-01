@@ -8,8 +8,8 @@ from rest_framework.permissions import AllowAny
 schema_view = get_schema_view(
     openapi.Info(
         title='CloneAutoRia',
-        default_version='v1',
-        description='About Cars',
+        default_version='v2.2',
+        description='Project Like Autoria',
         contact=openapi.Contact(email='biluksanya@ukr.net')
     ),
     public=True,
