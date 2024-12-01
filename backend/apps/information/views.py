@@ -1,16 +1,18 @@
 from datetime import datetime
 
-from core.permissions import IsManager, IsSuperUser, IsUser
 from core.services.car_statistic import CarStatisticService
-from django.contrib.auth import get_user, get_user_model
-from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth import get_user_model
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from apps.cars.models import CarModel, CurrencyModel
 from apps.cars.serializers import CarSerializer, CurrencySerializer
+from apps.information.serializer import (CarInformationSerializer,
+                                         InformationWebsiteSerializer)
 from apps.users.serializer import UserSerializer
 
 from .models import CarViewingModel
@@ -19,8 +21,16 @@ UserModel = get_user_model()
 
 
 class TradingPlatformInformationView(GenericAPIView):
+    """
+    Get information about the trading platform
+    """
     permission_classes = (AllowAny,)
 
+    def get_serializer(self, *args, **kwargs):
+        pass
+
+    @swagger_auto_schema(operation_id='Website information',
+                         responses={status.HTTP_200_OK: InformationWebsiteSerializer}, security=[])
     def get(self, *args, **kwargs):
         registered_users = UserModel.objects.all().count()
         premium_users = UserModel.objects.filter(is_premium=True).count()
@@ -45,10 +55,27 @@ class TradingPlatformInformationView(GenericAPIView):
 
 
 class UserCarInformationView(GenericAPIView):
+    """
+        Get information about the car: number of views and average price for a given car model
+    """
     queryset = CarModel.objects.all()
     serializer_class = CarSerializer
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(operation_id='Car information', responses={status.HTTP_200_OK: CarInformationSerializer},
+                         manual_parameters=[openapi.Parameter(name='day', in_=openapi.IN_QUERY,
+                                                              description='the number of days for which you want'
+                                                                          ' to get the number of views',
+                                                              required=False, type='str', default='today'),
+                                            openapi.Parameter(name='week', in_=openapi.IN_QUERY,
+                                                              description='the number of week for which you want'
+                                                                          ' to get the number of views',
+                                                              required=False, type='str', default='this week'),
+                                            openapi.Parameter(name='month', in_=openapi.IN_QUERY,
+                                                              description='the number of month for which you want'
+                                                                          ' to get the number of views',
+                                                              required=False, type='str', default='this month')
+                                            ])
     def get(self, request, *args, **kwargs):
         user = self.request.user
         user_serializer = UserSerializer(user)

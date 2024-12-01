@@ -2,6 +2,7 @@ from core.services.currency_service import CurrencyService
 from core.services.email_service import EmailService
 from core.services.profanity_service import NoProfanityService
 from django.utils.decorators import method_decorator
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import (GenericAPIView, ListAPIView,
@@ -12,7 +13,7 @@ from rest_framework.response import Response
 
 from apps.cars.models import CarModel
 from apps.cars.serializers import (CarListSerializer, CarPhotoSerializer,
-                                   CarSerializer)
+                                   CarSerializer, MessageSerializer)
 from apps.users.models import UserModel
 from apps.users.serializer import UserSerializer
 
@@ -31,10 +32,16 @@ class CarListView(ListAPIView):
 
 
 class CreateCarView(GenericAPIView):
+    """
+    Create new car. When creating a car, the user must be authorized,
+    as a check is made for the presence of a premium and a check for the presence of obscene language in the ad.
+    """
     queryset = UserModel.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
 
+    @swagger_auto_schema(operation_id='Car_create', responses={status.HTTP_200_OK: CarSerializer,
+                                                                    status.HTTP_400_BAD_REQUEST: MessageSerializer},)
     def post(self, *args, **kwargs):
         user = self.request.user
         user_serializer = UserSerializer(user)
@@ -50,15 +57,26 @@ class CreateCarView(GenericAPIView):
                 EmailService.payment(user)
             if serializer.validated_data.get('brand') == 'Other':
                 serializer.save(user=user)
-                return Response('The car ad has been added with the manufacturer brand "Other". '
-                                'To add your car brand, please contact the support chat', status.HTTP_201_CREATED)
+                return Response({'details': 'The car ad has been added with the manufacturer brand "Other". '
+                                'To add your car brand, please contact the support chat'}, status.HTTP_201_CREATED)
             serializer.save(user=user)
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
             return Response({'details': no_profanity_data}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(responses={status.HTTP_200_OK: CarSerializer}, security=[]))
 class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """
+        get:
+            Get car by id
+        put:
+            Full Update car by id
+        patch:
+            Partial Update car by id
+        delete:
+            Delete car by id
+    """
     queryset = CarModel.objects.all()
     serializer_class = CarSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -89,9 +107,15 @@ class CarRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 class CarAddPhotosView(GenericAPIView):
+    """
+    Add photo to car
+    """
     permission_classes = (IsAuthenticated,)
     queryset = CarModel.objects.all()
 
+    @swagger_auto_schema(responses={status.HTTP_200_OK: CarSerializer}, request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT, required=['photo'],
+        properties={'photo': openapi.Schema(type=openapi.TYPE_FILE)},))
     def put(self, *args, **kwargs):
         files = self.request.FILES
         car = self.get_object()

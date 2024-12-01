@@ -26,7 +26,7 @@ class UserActivateView(GenericAPIView):
     def get_serializer(self, *args, **kwargs):
         pass
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: UserSerializer}, security=[])
+    @swagger_auto_schema(operation_id='Activate user', responses={status.HTTP_200_OK: UserSerializer}, security=[])
     def post(self, *args, **kwargs):
         token = kwargs['token']
         user = JWTService.validate_token(token, ActivateToken)
@@ -43,7 +43,8 @@ class RecoveryRequestView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = EmailSerializer
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: SuccessSerializer}, security=[])
+    @swagger_auto_schema(operation_id='Request to recovery password',
+                         responses={status.HTTP_200_OK: SuccessSerializer}, security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)
@@ -60,8 +61,8 @@ class RecoveryPasswordView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PasswordSerializer
 
-    @swagger_auto_schema(request={PasswordSerializer}, responses={status.HTTP_200_OK: SuccessSerializer},
-                         security=[])
+    @swagger_auto_schema(operation_id='Set new user password', request={PasswordSerializer},
+                         responses={status.HTTP_200_OK: SuccessSerializer}, security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)
@@ -80,7 +81,7 @@ class PaymentForPremiumView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = PaymentSerializer
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: UserSerializer}, security=[])
+    @swagger_auto_schema(operation_id='Payment premium user', responses={status.HTTP_200_OK: UserSerializer}, security=[])
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.get_serializer(data=data)

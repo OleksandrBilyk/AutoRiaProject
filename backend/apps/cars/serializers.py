@@ -1,4 +1,5 @@
 
+from django.db.transaction import atomic
 from rest_framework import serializers
 
 from apps.cars.models import CarModel, CarPhotoModel, CurrencyModel
@@ -35,3 +36,7 @@ class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = CurrencyModel
         fields = ('id', 'created_at', 'updated_at', 'ccy', 'buy', 'sale')
+
+
+class MessageSerializer(serializers.Serializer):
+    details = serializers.CharField()

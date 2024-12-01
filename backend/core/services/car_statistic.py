@@ -21,7 +21,7 @@ class CarStatisticService:
             else car_viewing.filter(created_at__week=datetime.now().isocalendar().week)
         context = {'car_viewing_all_time': car_viewing_all_time,
                    'car_viewing_by_month': car_viewing_by_month.count(),
-                   'car_viewing_by_week,': car_viewing_by_week.count(),
+                   'car_viewing_by_week': car_viewing_by_week.count(),
                    'car_viewing_by_day': car_viewing_by_day.count()}
         return context
     @staticmethod
