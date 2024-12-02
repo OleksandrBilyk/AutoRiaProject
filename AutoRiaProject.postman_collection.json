@@ -1,0 +1,754 @@
+{
+	"info": {
+		"_postman_id": "780ff250-a952-47d2-aa0e-089ff2de6762",
+		"name": "AutoRiaProject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.2.1/collection.json",
+		"_exporter_id": "31098312"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"biluksanya@ukr.net\",\r\n    \"password\":\"Pas$w0rd\",\r\n    \"profile\":{\"name\": \"Oleksandr\", \"surname\":\"Bilyk\", \"age\":\"37\", \"phone_number\": \"+380930377110\"}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Block User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/users/2/block",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UnBlock User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/users/2/unblock",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"unblock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Avatar To User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/Olexander/Pictures/depositphotos_18438047-stock-illustration-happy-smiley-emoticon-face.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/2/avatars",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"2",
+								"avatars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "Car Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "brand",
+									"value": "KIA",
+									"type": "text"
+								},
+								{
+									"key": "car_model",
+									"value": "Rio",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "10000",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2009",
+									"type": "text"
+								},
+								{
+									"key": "information",
+									"value": "Experimental Car",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "USD",
+									"type": "text"
+								},
+								{
+									"key": "region",
+									"value": "Odeska",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/cars/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Car Review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/cars/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Car Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "brand",
+									"value": "KIA",
+									"type": "text"
+								},
+								{
+									"key": "car_model",
+									"value": "Sorento",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "19200",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2020",
+									"type": "text"
+								},
+								{
+									"key": "information",
+									"value": "A Car super",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "USD",
+									"type": "text"
+								},
+								{
+									"key": "region",
+									"value": "Dnipropetrovska",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/cars/15",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Car Partial Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "car_model",
+									"value": "Rio",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/cars/15",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"15"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Car Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/cars/16",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add photo to Car",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/Olexander/Downloads/new_qashqai_2024_offers-1.png.ximg.l_6_m.smart.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/cars/5/photos",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cars",
+								"5",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Activate User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/auth/activate/{{activate_token}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"activate",
+								"{{activate_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var access = pm.response.json().access;\r",
+									"pm.environment.set(\"access\", access);\r",
+									"var refresh = pm.response.json().refresh;\r",
+									"pm.environment.set(\"refresh\", refresh);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "biluksanya@ukr.net",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Pas$w0rd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment for Premium User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "biluksanya@ukr.net",
+									"type": "text"
+								},
+								{
+									"key": "payment",
+									"value": "300",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/payment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recovery User Password Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "biluksanya@ukr.net",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/recovery",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"recovery"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recovery Password by User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "password",
+									"value": "Pas$w0rd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/recovery/{{recovery_token}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"recovery",
+								"{{recovery_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Use Refresh Token by User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var access = pm.response.json().access;\r",
+									"pm.environment.set(\"access\", access);\r",
+									"var refresh = pm.response.json().refresh;\r",
+									"pm.environment.set(\"refresh\", refresh);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "refresh",
+									"value": "{{refresh}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/refresh",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token For Socket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var socket_token = pm.response.json().token;\r",
+									"pm.environment.set(\"socket_token\", socket_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/auth/socket",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"socket"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Information",
+			"item": [
+				{
+					"name": "Trading Platform Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"information"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Car Information",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "day",
+									"value": "29",
+									"type": "text"
+								},
+								{
+									"key": "week",
+									"value": "46",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "month",
+									"value": "9",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/information/car/18",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"information",
+								"car",
+								"18"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
