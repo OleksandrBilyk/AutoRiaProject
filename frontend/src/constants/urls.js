@@ -1,5 +1,5 @@
 const baseURL = '/api'
-const socketBaseURL = 'ws://localhost/api'
+const socketBaseURL = 'ws://test-my-project.eu-north-1.elasticbeanstalk.com/api'
 const auth = '/auth'
 const cars = '/cars'
 const urls = {

@@ -4,8 +4,15 @@ from apps.cars.serializers import CarSerializer
 
 
 class CurrencyService:
+    """
+    Service for car value transactions.
+    """
     @staticmethod
     def add_currency_to_car(data):
+        """
+        a function that takes the cost of a car in any currency and converts the amount into three currencies.
+        The conversion uses data obtained from the PrivatBank API
+        """
         currency_data = CurrencyModel.objects.all()
         cross_course = {arg.ccy: (arg.buy, arg.sale) for arg in currency_data}
         data['cross_course'] = cross_course
@@ -31,6 +38,9 @@ class CurrencyService:
 
     @staticmethod
     def calculate_average_cost(cars):
+        """
+        function that calculates the average price of cars in three currencies
+        """
         cars_serializer = CarSerializer(cars, many=True)
         sum_of_price = {'UAH': 0, 'USD': 0, 'EUR': 0}
         for one_car in cars_serializer.data:

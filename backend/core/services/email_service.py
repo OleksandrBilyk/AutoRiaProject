@@ -13,6 +13,10 @@ from django.template.loader import get_template
 UserModel = get_user_model()
 
 class EmailService:
+    """
+    Service for sending letters to email. Used to link activation token, password recovery,
+    notify admins about banning a user by the foul language tracking system, and link to pay for a premium account
+    """
     @staticmethod
     @app.task
     def __send_email(to: str, template_name: str, context: dict, subject='') -> None:
@@ -51,7 +55,6 @@ class EmailService:
                 'User banned due to profanity'
             )
 
-
     @classmethod
     def payment(cls, user: UserDataClass):
         url = f'http://localhost:80/api/auth/payment/'
@@ -64,10 +67,13 @@ class EmailService:
     @staticmethod
     @app.task
     def get_currency_course():
+        """
+        function for receiving fresh data from the Privatbank API about exchange rates.
+        It is placed here because when exporting to a separate service,
+        celery does not make a request according to the schedule (some bug)
+        """
         url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
-
         response = requests.get(url)
-
         if response.status_code == 200:
             currency = response.json()
             CurrencyModel.objects.all().delete()

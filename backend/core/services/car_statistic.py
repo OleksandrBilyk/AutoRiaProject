@@ -9,8 +9,15 @@ from rest_framework.generics import get_object_or_404
 
 
 class CarStatisticService:
+    """
+    A service that generates car statistics in our app
+    """
     @staticmethod
     def car_viewing_count(car_id, request_data):
+        """
+        function that generates statistics of car views for a day, week, month.
+        parameters can be numbers for which period we are interested in statistics. By default, today is used
+        """
         car_viewing = CarViewingModel.objects.filter(car_id=car_id)
         car_viewing_all_time = car_viewing.count()
         car_viewing_by_day = car_viewing.filter(created_at__day=request_data.get('day')) if request_data.get('day') \
@@ -26,6 +33,9 @@ class CarStatisticService:
         return context
     @staticmethod
     def car_price_statistic(car):
+        """
+        a function that generates statistics on the average price of a car of this type in Ukraine and the region
+        """
         car_serializer = CarSerializer(car)
         cars_this_model_all = (CarModel.objects.exclude(id=car_serializer.data.get('id')).
                                filter(car_model=car_serializer.data.get('car_model')))

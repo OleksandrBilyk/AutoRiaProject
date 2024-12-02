@@ -8,7 +8,12 @@ UserModel = get_user_model()
 
 list_of_profanity = ['dick', 'жопа']  # This is a list of profanity words. In reality, it will be larger and expandable
 
+
 class NoProfanityService:
+    """
+    A service for detecting profanity in an ad.
+    Detection is performed by comparing words stored in the 'list_of_profanity' list.
+    """
     @staticmethod
     def no_profanity_check(user, data):
         if any(sub in dict(data).get('information')[0] for sub in list_of_profanity):
